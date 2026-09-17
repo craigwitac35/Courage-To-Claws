@@ -22,7 +22,7 @@ export function AboutPreview() {
           </h2>
           <p style={{ marginTop: "1.25rem" }}>
             Courage To Claws was built on service, resilience, and the determination to keep moving forward. Founded as a
-            veteran-owned company with a commitment to hiring veterans, the name represents both the courage it takes to
+            veteran-owned company built on that same standard, the name represents both the courage it takes to
             raise your right hand and serve your country, and the strength to claw your way through injuries, hardships,
             and the battles life can bring.
           </p>

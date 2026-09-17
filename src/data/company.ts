@@ -24,7 +24,7 @@ export const values = [
 ] as const;
 
 export const whyUs = [
-  { title: "Veteran-Owned", text: "Founded by an Army veteran with a commitment to hiring veterans.", icon: "flag" },
+  { title: "Veteran-Owned", text: "Founded and led by an Army veteran and Purple Heart recipient.", icon: "flag" },
   { title: "Hands-On Leadership", text: "The owner is on the job, not behind a desk.", icon: "hammer" },
   { title: "Quality Craftsmanship", text: "Work that holds up, done the right way the first time.", icon: "level" },
   { title: "Straightforward Communication", text: "Clear answers, honest timelines, no runaround.", icon: "chat" },

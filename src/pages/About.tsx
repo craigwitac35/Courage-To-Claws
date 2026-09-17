@@ -82,10 +82,10 @@ export function About() {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">Our mission</p>
-            <h2 className="h-lg">Hiring veterans. Building for the community.</h2>
+            <h2 className="h-lg">Built on service. Built for the community.</h2>
             <p className="lead" style={{ marginTop: "1rem" }}>
-              Courage To Claws was created to give veterans a place to put their skills and work ethic to use, and to
-              deliver work the community can count on. As the crew grows, you'll meet them here.
+              Courage To Claws brings the same discipline and work ethic learned in service to every job, and works
+              to deliver work the community can count on. As the crew grows, you'll meet them here.
             </p>
           </div>
           {/* Future crew/team section goes here. */}
