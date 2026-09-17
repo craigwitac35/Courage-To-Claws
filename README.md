@@ -1,6 +1,6 @@
 # Courage To Claws — Website
 
-Veteran-owned general contractor site. React + Vite + TypeScript, Supabase backend.
+Veteran-owned general contractor site. React + Vite + TypeScript, Supabase backend, private admin dashboard.
 
 ## Run locally
 
@@ -10,11 +10,11 @@ cp .env.example .env     # add your Supabase URL + anon key
 npm run dev
 ```
 
-Without a `.env` the site still runs: the gallery shows placeholder projects and the quote form logs submissions to the console instead of sending them.
+Without a `.env` the site still runs in dev with placeholder gallery data and console-logged form submissions. **In a production build with no env vars, the quote form shows an error instead of a fake success.** Set the env vars in Vercel before launch.
 
 ## Deploy (Vercel)
 
-Import the repo, framework preset **Vite**, add the two `VITE_*` env vars. Add a rewrite so client-side routes work: `vercel.json` is already included.
+Import the repo, framework preset **Vite**, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. `vercel.json` handles client-side routing.
 
 ## Where things live
 
@@ -25,42 +25,55 @@ Import the repo, framework preset **Vite**, add the two `VITE_*` env vars. Add a
 | Quote form project types, timelines, contact methods, steps | `src/data/projectTypes.ts` |
 | Gallery categories + placeholder projects | `src/data/galleryCategories.ts` |
 | All styles and design tokens | `src/styles/global.css` |
-| Pages | `src/pages/` |
-| Components | `src/components/` |
-| Supabase schema, RLS, buckets | `supabase/migrations/001_init.sql` |
+| Pages (incl. `NotFound`, `Admin`) | `src/pages/` |
+| Public components | `src/components/` |
+| Admin components | `src/components/admin/` |
+| Supabase schema, RLS, buckets | `supabase/migrations/001_init.sql`, `002_admin_and_hardening.sql`, `003_drop_timeline.sql` |
 | Lead email notification | `supabase/functions/notify-quote/index.ts` |
+| Images (hero, logo, favicon, share image) | `public/` |
 
-## Supabase setup (one time)
+## Supabase setup
 
-1. Create a project. Run `supabase/migrations/001_init.sql` in the SQL editor.
-2. Copy the project URL and anon key into `.env` (and Vercel env vars).
-3. Deploy the edge function: `supabase functions deploy notify-quote --no-verify-jwt`
-4. Set function secrets: `RESEND_API_KEY`, `NOTIFY_TO` (Troy's email), `NOTIFY_FROM` (a verified Resend sender).
-5. Database > Webhooks > create one on `quote_requests`, event INSERT, target the `notify-quote` edge function.
+1. Create a project. In the SQL editor run `001_init.sql`, `002_admin_and_hardening.sql`, then `003_drop_timeline.sql`, in that order.
+2. Copy the project URL + anon key into `.env` and Vercel env vars.
+3. **Auth:** Authentication → Providers → Email → turn **off** "Enable email signups". Then Authentication → Users → **Invite user** for Troy's email (and yours). Only invited addresses can sign in to `/admin`.
+   Authentication → URL Configuration → add the site URL (`https://courage-to-claws.vercel.app`) and `https://courage-to-claws.vercel.app/admin` to redirect URLs.
+4. **Edge function:** `supabase functions deploy notify-quote --no-verify-jwt`
+   Secrets: `RESEND_API_KEY`, `NOTIFY_TO` (Troy's email), `NOTIFY_FROM` (verified Resend sender), `WEBHOOK_SECRET` (any long random string).
+5. **Webhook:** Database → Webhooks → new, table `quote_requests`, event INSERT, type Edge Function → `notify-quote`. Add HTTP header `x-webhook-secret` = the same `WEBHOOK_SECRET` value.
 
-## Adding gallery photos (launch workflow)
+## Admin dashboard (`/admin`)
 
-1. Storage > `gallery` bucket > upload the photo(s). Copy the public URL.
-2. Table editor > `gallery_items` > insert row: `title`, `category` (decks / roofs / additions / remodels), `image_urls` (array of the URLs), optional `description`, `featured` true/false.
-3. The homepage shows featured items (newest first, up to 6). The Our Work page shows everything.
+Not linked anywhere; share the URL with Troy directly. Sign in = email a magic link, tap it, done.
 
-## Swapping in real photos
+**Photos tab**
+- Add project → pick category → add photos from camera roll (any number) → title → optional description → Feature on homepage → **Save as draft** or **Publish**.
+- Photos are resized to 1600px JPEG in the browser before upload (keeps the free storage tier sustainable, fixes sideways/HEIC photos).
+- First photo = cover. Reorder with the arrows on Edit.
+- **Description matters:** on the public gallery, a project with a description becomes a tap-to-flip card (photo on the front, description on the back). No description = plain photo, no flip.
+- Drafts are invisible to the public. Publish/Unpublish is one tap.
+- Delete removes the row and the photos from storage.
 
-- Hero: put `hero.jpg` and `hero-mobile.jpg` in `public/` and set `HERO_IMAGE = true` in `src/components/Hero.tsx`.
-- Everywhere else uses the `<Placeholder>` component. Replace with `<img src=... alt=...>` where real photos exist.
-- Logo: replace the SVG in `src/components/Logo.tsx` with an `<img>`.
+**Project requests tab**
+- Every quote-form lead, newest first, with all fields. Photos open via signed links (1 hour).
+- Status chips: New / Contacted / Closed. Filter by status at the top.
+
+## Spam protection on the quote form
+
+- Honeypot field (hidden; bots fill it, people can't).
+- Minimum fill time (4 s).
+- Database trigger: max 5 submissions per hour per email or phone.
+- Webhook secret so nobody can trigger the notification email directly.
 
 ## Before launch checklist
 
-- [ ] Confirm the real business email (`src/data/company.ts`)
-- [ ] Confirm service area wording (`company.serviceAreaPlaceholder`)
+- [ ] Confirm the real business email (`src/data/company.ts`) — current value is a malformed placeholder
+- [ ] Confirm service area wording (`company.serviceAreaPlaceholder`) → then add LocalBusiness JSON-LD and geo terms to titles
 - [ ] Troy approves About and Why Us copy
-- [ ] Real hero photo + mobile crop
-- [ ] Real logo file
-- [ ] `public/og-image.jpg` for link previews
-- [ ] Add LocalBusiness structured data once address/service area are confirmed
+- [ ] Replace remaining `<Placeholder>` photos (About crew photo, Services cards, gallery) with real photos
+- [ ] Custom domain: update `canonical`, `og:url`, `og:image`, `twitter:image`, Plausible `data-domain` in `index.html`, and `public/robots.txt` + `public/sitemap.xml`
+- [ ] Register the domain in Plausible (or swap the script for GA4)
 
-## Phase 2 (not built)
+## Not built (by decision)
 
-- Password-protected `/admin` route (Supabase Auth) for uploading gallery photos from a phone.
-- SMS notification via Twilio on the same webhook.
+Employee hour tracking, SMS notifications, pricing estimator, email-to-upload.

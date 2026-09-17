@@ -22,7 +22,7 @@ export function Services() {
     <>
       <PageHero
         eyebrow="Our services"
-        title="From Concept To Completion"
+        title="From concept to completion"
         lead="From new construction to kitchens, bathrooms, additions, decks, roofing, and everything in between, Courage To Claws takes on projects from concept through completion."
       />
       <section className="section">

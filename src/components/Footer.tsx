@@ -8,7 +8,7 @@ export function Footer() {
       <div className="container">
         <div className="footer__grid">
           <div>
-            <Logo />
+            <Logo dark />
             <p className="footer__tag">{company.tagline}</p>
             <p style={{ marginTop: "1rem", maxWidth: "26rem" }}>
               A veteran-owned general contractor handling new construction, remodeling, roofing, decks, and additions.

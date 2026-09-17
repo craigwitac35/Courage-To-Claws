@@ -14,14 +14,6 @@ export const projectTypes: ProjectType[] = [
   { id: "other", label: "Other", icon: "other" },
 ];
 
-export const timelines = [
-  { id: "asap", label: "As soon as possible" },
-  { id: "1_3_months", label: "Within 1 to 3 months" },
-  { id: "3_6_months", label: "Within 3 to 6 months" },
-  { id: "6_plus_months", label: "6+ months out" },
-  { id: "planning", label: "Just planning" },
-];
-
 export const contactMethods = [
   { id: "call", label: "Call" },
   { id: "text", label: "Text" },

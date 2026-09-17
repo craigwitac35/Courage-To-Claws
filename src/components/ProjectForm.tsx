@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { projectTypes, timelines, contactMethods, formSteps, type StepId } from "../data/projectTypes";
+import { projectTypes, contactMethods, formSteps, type StepId } from "../data/projectTypes";
 import { submitQuote, validatePhoto, MAX_PHOTOS, type QuoteFormData } from "../lib/submitQuote";
 import { Icon } from "./Icons";
 import { company } from "../data/company";
@@ -9,18 +9,19 @@ type Errors = Partial<Record<keyof QuoteFormData, string>>;
 const initial: QuoteFormData = {
   projectType: "",
   location: "",
-  timeline: "",
   description: "",
   photos: [],
   name: "",
   phone: "",
   email: "",
   preferredContact: "",
+  website: "",
+  startedAt: 0,
 };
 
 export function ProjectForm({ embedded = true }: { embedded?: boolean }) {
   const [step, setStep] = useState<StepId>("type");
-  const [data, setData] = useState<QuoteFormData>(initial);
+  const [data, setData] = useState<QuoteFormData>(() => ({ ...initial, startedAt: Date.now() }));
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -43,7 +44,6 @@ export function ProjectForm({ embedded = true }: { embedded?: boolean }) {
     if (id === "type" && !data.projectType) e.projectType = "Choose the type of project so we know where to start.";
     if (id === "details") {
       if (!data.location.trim()) e.location = "Enter the city or address where the work will happen.";
-      if (!data.timeline) e.timeline = "Pick the timeline that's closest to what you're thinking.";
     }
     if (id === "contact") {
       if (!data.name.trim()) e.name = "Enter your name.";
@@ -202,21 +202,6 @@ function DetailsStep({ data, set, errors }: { data: QuoteFormData; set: <K exten
         )}
       </div>
 
-      <div className={`field${errors.timeline ? " field--error" : ""}`}>
-        <span className="sr-only" id="timeline-label">
-          Desired timeline
-        </span>
-        <label aria-hidden="true">Desired timeline</label>
-        <div className="chips" role="radiogroup" aria-labelledby="timeline-label">
-          {timelines.map((t) => (
-            <button key={t.id} type="button" role="radio" aria-checked={data.timeline === t.id} className="chip" onClick={() => set("timeline", t.id)}>
-              {t.label}
-            </button>
-          ))}
-        </div>
-        {errors.timeline && <span className="field__error">{errors.timeline}</span>}
-      </div>
-
       <div className="field">
         <label htmlFor="description">
           Tell us more about your project <span className="opt">Optional</span>
@@ -313,6 +298,11 @@ function ContactStep({ data, set, errors }: { data: QuoteFormData; set: <K exten
     <>
       <h3>How can we reach you?</h3>
       <p className="pform__hint">We'll only use this to follow up about your project.</p>
+      {/* Honeypot: hidden from people, filled by bots. Never make this visible. */}
+      <div className="hp" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input id="website" type="text" tabIndex={-1} autoComplete="off" value={data.website} onChange={(e) => set("website", e.target.value)} />
+      </div>
       {field("name", "Name", "text", "name")}
       <div className="field-row">
         {field("phone", "Phone", "tel", "tel", "(320) 555-0100")}
@@ -346,7 +336,6 @@ function ReviewStep({ data, goTo }: { data: QuoteFormData; goTo: (s: StepId) => 
   const rows: { k: string; v: ReactNode; step: StepId }[] = [
     { k: "Project type", v: label(projectTypes, data.projectType), step: "type" },
     { k: "Location", v: data.location, step: "details" },
-    { k: "Timeline", v: label(timelines, data.timeline), step: "details" },
     { k: "Description", v: data.description || "None added", step: "details" },
     {
       k: "Photos",

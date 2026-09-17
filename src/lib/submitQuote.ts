@@ -3,18 +3,22 @@ import { supabase } from "./supabase";
 export type QuoteFormData = {
   projectType: string;
   location: string;
-  timeline: string;
   description: string;
   photos: File[];
   name: string;
   phone: string;
   email: string;
   preferredContact: string;
+  /** honeypot: real users never fill this; bots do */
+  website: string;
+  /** when the form was first rendered, for a minimum-time check */
+  startedAt: number;
 };
 
 const BUCKET = "quote-photos";
 const MAX_PHOTOS = 8;
 const MAX_MB = 10;
+const MIN_FILL_MS = 4000;
 
 export function validatePhoto(file: File): string | null {
   if (!file.type.startsWith("image/")) return `${file.name} is not an image.`;
@@ -24,22 +28,32 @@ export function validatePhoto(file: File): string | null {
 
 export { MAX_PHOTOS };
 
+const GENERIC_FAIL = "Your request could not be sent. Please try again or call us directly.";
+
 // Photos stay in memory until this runs. Uploads happen first, then the row is
 // written with the resulting storage paths.
 export async function submitQuote(data: QuoteFormData): Promise<{ ok: true } | { ok: false; message: string }> {
-  if (!supabase) {
-    // Dev/demo mode: no backend configured.
-    console.info("[demo] quote request", data);
-    await new Promise((r) => setTimeout(r, 600));
+  // Spam checks. Bots trip these; people don't. Fail quietly as a "success" so bots learn nothing.
+  if (data.website.trim() !== "" || Date.now() - data.startedAt < MIN_FILL_MS) {
     return { ok: true };
   }
 
-  const stamp = Date.now();
-  const folder = `${stamp}-${crypto.randomUUID().slice(0, 8)}`;
+  if (!supabase) {
+    if (import.meta.env.DEV) {
+      console.info("[dev] quote request (no Supabase configured)", data);
+      await new Promise((r) => setTimeout(r, 600));
+      return { ok: true };
+    }
+    // Production with no backend: never fake a success.
+    console.error("Supabase env vars are missing in production build.");
+    return { ok: false, message: GENERIC_FAIL };
+  }
+
+  const folder = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}`;
   const photoPaths: string[] = [];
 
   for (const [i, file] of data.photos.entries()) {
-    const ext = file.name.split(".").pop() || "jpg";
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
     const path = `${folder}/${i + 1}.${ext}`;
     const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type });
     if (error) return { ok: false, message: "One of the photos could not be uploaded. Try again or remove it." };
@@ -49,7 +63,6 @@ export async function submitQuote(data: QuoteFormData): Promise<{ ok: true } | {
   const { error } = await supabase.from("quote_requests").insert({
     project_type: data.projectType,
     location: data.location,
-    timeline: data.timeline,
     description: data.description || null,
     photo_urls: photoPaths,
     name: data.name,
@@ -58,6 +71,9 @@ export async function submitQuote(data: QuoteFormData): Promise<{ ok: true } | {
     preferred_contact: data.preferredContact,
   });
 
-  if (error) return { ok: false, message: "Your request could not be sent. Please try again or call us directly." };
+  if (error) {
+    console.error(error);
+    return { ok: false, message: GENERIC_FAIL };
+  }
   return { ok: true };
 }

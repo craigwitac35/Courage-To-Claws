@@ -7,7 +7,7 @@ export function ProjectFormSection({ embedded = true }: { embedded?: boolean }) 
         <div className="section-head reveal">
           <p className="eyebrow">Get a quote</p>
           <h2 id="pform-title" className="h-xl">
-            Tell Us About Your Project
+            Tell us about your project
           </h2>
           <p className="lead" style={{ marginTop: "1rem" }}>
             Have a project in mind? Tell us what you're looking to build, fix, or improve and we'll get in touch.

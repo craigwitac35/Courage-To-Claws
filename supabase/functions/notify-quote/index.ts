@@ -5,8 +5,14 @@
 //   RESEND_API_KEY   - from resend.com
 //   NOTIFY_TO        - Troy's email address
 //   NOTIFY_FROM      - a verified sender, e.g. "Courage To Claws <leads@yourdomain.com>"
+//   WEBHOOK_SECRET   - any long random string (e.g. `openssl rand -hex 32`)
 //
 // Deploy: supabase functions deploy notify-quote --no-verify-jwt
+// (Database webhooks carry no user JWT, so JWT verification must stay off.
+//  The shared secret below is what stops anyone else from invoking this URL.)
+//
+// Webhook config (Database > Webhooks): add HTTP header
+//   x-webhook-secret: <the same WEBHOOK_SECRET value>
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -14,7 +20,6 @@ type Row = {
   id: string;
   project_type: string;
   location: string;
-  timeline: string;
   description: string | null;
   photo_urls: string[];
   name: string;
@@ -36,9 +41,6 @@ const labels: Record<string, string> = {
   other: "Other",
   asap: "As soon as possible",
   "1_3_months": "Within 1 to 3 months",
-  "3_6_months": "Within 3 to 6 months",
-  "6_plus_months": "6+ months out",
-  planning: "Just planning",
   call: "Call",
   text: "Text",
   email: "Email",
@@ -47,6 +49,10 @@ const label = (v: string) => labels[v] ?? v;
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] as string));
 
 Deno.serve(async (req) => {
+  const secret = Deno.env.get("WEBHOOK_SECRET");
+  if (!secret || req.headers.get("x-webhook-secret") !== secret) {
+    return new Response("unauthorized", { status: 401 });
+  }
   try {
     const payload = await req.json();
     const row: Row = payload.record ?? payload;
@@ -67,7 +73,6 @@ Deno.serve(async (req) => {
       ["Prefers", label(row.preferred_contact)],
       ["Project", label(row.project_type)],
       ["Location", row.location],
-      ["Timeline", label(row.timeline)],
       ["Details", row.description || "(none)"],
     ];
 

@@ -8,7 +8,7 @@ export function Contact() {
   useSeo("Contact", "Call, text, email, or send project details to Courage To Claws, a veteran-owned general contractor.");
   return (
     <>
-      <PageHero eyebrow="Contact" title="Let's Talk About Your Project" lead="Call, text, email, or send your project details below. Whichever is easiest for you.">
+      <PageHero eyebrow="Contact" title="Let's talk about your project" lead="Call, text, email, or send your project details below. Whichever is easiest for you.">
         <ul className="contact-list">
           <li>
             <Icon name="phone" />

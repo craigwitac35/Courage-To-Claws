@@ -4,19 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#5B2A86" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <!-- TODO: update canonical + og:url + Plausible data-domain when the custom domain is live -->
+    <link rel="canonical" href="https://courage-to-claws.vercel.app/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <link rel="preload" as="image" href="/hero-mobile.webp" media="(max-width: 700px)" />
+    <link rel="preload" as="image" href="/hero-desktop.webp" media="(min-width: 701px)" />
     <title>Courage To Claws | Veteran-Owned General Contractor</title>
     <meta name="description" content="Courage To Claws is a veteran-owned general contracting company. New construction, remodeling, roofing, decks, and additions built with craftsmanship and purpose." />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Courage To Claws" />
+    <meta property="og:url" content="https://courage-to-claws.vercel.app/" />
     <meta property="og:title" content="Courage To Claws | Veteran-Owned General Contractor" />
     <meta property="og:description" content="New construction, remodeling, roofing, decks, and additions built with craftsmanship and purpose." />
-    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image" content="https://courage-to-claws.vercel.app/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Courage To Claws | Veteran-Owned General Contractor" />
+    <meta name="twitter:description" content="New construction, remodeling, roofing, decks, and additions built with craftsmanship and purpose." />
+    <meta name="twitter:image" content="https://courage-to-claws.vercel.app/og-image.jpg" />
+    <!-- Analytics (Plausible, privacy-friendly, no cookie banner needed). Set data-domain to the live domain. -->
+    <script defer data-domain="courage-to-claws.vercel.app" src="https://plausible.io/js/script.js"></script>
   </head>
   <body>
     <div id="root"></div>

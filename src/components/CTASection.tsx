@@ -7,7 +7,7 @@ export function CTASection() {
     <section className="cta-band section section--tight" aria-labelledby="cta-title">
       <div className="container cta-band__inner">
         <div>
-          <h2 id="cta-title">Ready To Start Your Project?</h2>
+          <h2 id="cta-title">Ready to start your project?</h2>
           <p>Tell us what you're working on and let's take the next step.</p>
         </div>
         <div className="cta-band__actions">

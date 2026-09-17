@@ -9,12 +9,12 @@ export function About() {
   useSeo("About", "Courage To Claws is a veteran-owned general contractor founded by Army veteran and Purple Heart recipient Troy Risdal.");
   return (
     <>
-      <PageHero eyebrow="About" title="More Than A Construction Company" lead="Veteran-owned, hands-on, and built around the idea that how you work matters as much as what you build." />
+      <PageHero eyebrow="About" title="More than a construction company" lead="Veteran-owned, hands-on, and built around the idea that how you work matters as much as what you build." />
 
       <section className="section">
         <div className="container about">
           <div className="about__media">
-            <Placeholder label="Troy Risdal on site" tone="dark" />
+            <img src="/troy-color.jpg" alt="Troy Risdal" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <div className="about__body">
             <h2 className="h-lg">Where the name comes from</h2>
@@ -64,7 +64,7 @@ export function About() {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow">What we stand for</p>
-            <h2 className="h-xl">Courage. Resilience. Discipline. Purpose.</h2>
+            <h2 className="h-xl">Courage. Resilience. Discipline. <em>Purpose.</em></h2>
           </div>
           <div className="values">
             {values.map((v) => (

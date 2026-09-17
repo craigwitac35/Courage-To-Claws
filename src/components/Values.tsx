@@ -3,11 +3,12 @@ import { Icon } from "./Icons";
 
 export function Values() {
   return (
-    <section className="section section--tight" aria-labelledby="values-title">
+    <section className="section section--tight section--grid" aria-labelledby="values-title">
       <div className="container">
-        <h2 id="values-title" className="sr-only">
-          Our values
-        </h2>
+        <div className="values-intro reveal">
+          <h2 id="values-title">What we stand for</h2>
+          <span>Four words that run through every job.</span>
+        </div>
         <div className="values reveal">
           {values.map((v) => (
             <div className="value" key={v.id}>

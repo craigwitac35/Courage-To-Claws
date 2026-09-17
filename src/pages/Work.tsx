@@ -12,10 +12,12 @@ export function Work() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    fetchGallery().then((d) => {
-      setItems(d);
+    fetchGallery().then((r) => {
+      setItems(r.items);
+      setFailed(r.source === "error");
       setLoading(false);
     });
   }, []);
@@ -24,11 +26,19 @@ export function Work() {
 
   return (
     <>
-      <PageHero eyebrow="Our work" title="Real Projects. Real Results." lead="Decks, roofs, additions, and remodels. Real photos from real jobs will fill this gallery as they're added." />
+      <PageHero eyebrow="Our work" title="Real projects. Real results." lead="Decks, roofs, additions, and remodels. Real photos from real jobs will fill this gallery as they're added." />
       <section className="section">
         <div className="container">
           <GalleryFilter value={filter} onChange={setFilter} />
-          {loading ? <div className="empty">Loading projects…</div> : <GalleryGrid items={visible} />}
+          {loading ? (
+            <div className="empty">Loading projects…</div>
+          ) : failed ? (
+            <div className="empty" role="alert">
+              The gallery couldn't load right now. Refresh the page, or give us a call and we'll send photos directly.
+            </div>
+          ) : (
+            <GalleryGrid items={visible} />
+          )}
         </div>
       </section>
       <CTASection />

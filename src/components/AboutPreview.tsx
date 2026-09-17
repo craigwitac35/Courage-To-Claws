@@ -7,15 +7,18 @@ export function AboutPreview() {
   return (
     <section className="section section--warm" aria-labelledby="about-title">
       <div className="container about reveal">
+        <span className="about__bgword" aria-hidden="true">
+          Claws
+        </span>
         <div className="about__media">
           <Placeholder label="Troy and crew on a jobsite" tone="dark" />
         </div>
         <div className="about__body">
           <p className="eyebrow">Who we are</p>
           <h2 id="about-title" className="h-xl">
-            Built On Service.
+            Built on service.
             <br />
-            Driven By Purpose.
+            <em>Driven by purpose.</em>
           </h2>
           <p style={{ marginTop: "1.25rem" }}>
             Courage To Claws was built on service, resilience, and the determination to keep moving forward. Founded as a

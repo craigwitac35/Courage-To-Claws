@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
@@ -7,6 +7,8 @@ import { About } from "./pages/About";
 import { Services } from "./pages/Services";
 import { Work } from "./pages/Work";
 import { Contact } from "./pages/Contact";
+import { NotFound } from "./pages/NotFound";
+const Admin = lazy(() => import("./pages/Admin").then((m) => ({ default: m.Admin })));
 import { useReveal } from "./lib/useReveal";
 
 function ScrollManager() {
@@ -37,6 +39,15 @@ export default function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/our-work" element={<Work />} />
           <Route path="/contact" element={<Contact />} />
+          <Route
+            path="/admin"
+            element={
+              <Suspense fallback={<section className="admin" />}>
+                <Admin />
+              </Suspense>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

@@ -1,18 +1,41 @@
 // Small inline icon set. Simple line icons, intentionally not military-literal.
 const paths: Record<string, JSX.Element> = {
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
-  shield: <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" />,
-  mountain: <path d="M3 20l6-10 4 6 2-3 6 7H3z" />,
-  level: (
+  shield: (
     <>
-      <rect x="3" y="9" width="18" height="6" rx="1" />
-      <circle cx="12" cy="12" r="1.5" />
-      <path d="M8 9V6M16 9V6" />
+      <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" />
+      <path d="M8.5 12.5l3.5 3 3.5-5" />
     </>
   ),
-  home: <path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1v-9z" />,
+  mountain: (
+    <>
+      <path d="M3 20l6-9 3 4 3-6 6 11H3z" />
+      <path d="M15 9V4h4l-1.5 1.5L19 7h-4" />
+    </>
+  ),
+  level: (
+    <>
+      <path d="M3 15h18M3 15l2-6h14l2 6" />
+      <path d="M9.5 9v6M14.5 9v6" />
+      <circle cx="12" cy="12" r="1.2" />
+    </>
+  ),
+  home: (
+    <>
+      <path d="M3 11l9-7 9 7" />
+      <path d="M5 10v10h14V10" />
+      <path d="M9 20v-6h6v6" />
+    </>
+  ),
   flag: <path d="M5 21V4M5 4h13l-2 4 2 4H5" />,
-  hammer: <path d="M14 4l6 6-2 2-2-2-9 9-3-3 9-9-2-2 3-1z" />,
+  hammer: (
+    <>
+      <path d="M13 6l5 5-1.5 1.5-5-5z" />
+      <path d="M11 8.5L4 15.5 6.5 18l7-7" />
+      <path d="M14.5 4.5L18 3l3 3-1.5 3.5" />
+    </>
+  ),
+  square: <path d="M4 4v16h16M4 4h6v6M8 14h2M8 10h2M14 16v2M10 16v2" />,
   chat: <path d="M4 5h16v11H9l-5 4V5z" />,
   phone: <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a1 1 0 01-1 1A16 16 0 014 5a1 1 0 011-1z" />,
   mail: (

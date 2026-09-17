@@ -19,7 +19,7 @@ export const company = {
 export const values = [
   { id: "courage", title: "Courage", text: "The courage to serve, lead, and take on difficult challenges.", icon: "shield" },
   { id: "resilience", title: "Resilience", text: "The strength to overcome setbacks and keep moving forward.", icon: "mountain" },
-  { id: "discipline", title: "Discipline", text: "Doing the job right and refusing to cut corners.", icon: "level" },
+  { id: "discipline", title: "Discipline", text: "Doing the job right and refusing to cut corners.", icon: "square" },
   { id: "purpose", title: "Purpose", text: "Building something meaningful for customers and the community.", icon: "home" },
 ] as const;
 
