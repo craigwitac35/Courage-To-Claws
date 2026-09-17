@@ -525,20 +525,21 @@ button {
   display: block;
 }
 .hero__shade {
+  /* light foot shade only: the photo carries the text now, so keep it bright */
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, rgba(17, 17, 17, 0) 32%, rgba(17, 17, 17, 0.5) 58%, rgba(17, 17, 17, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(17, 17, 17, 0) 0%, rgba(17, 17, 17, 0) 72%, rgba(17, 17, 17, 0.45) 100%);
 }
 .hero__content {
-  /* clears the logo that's baked into the top-left of the photo */
-  padding-top: calc(var(--header-h) + 38svh);
-  padding-bottom: clamp(2.5rem, 7vh, 5rem);
+  /* only the buttons live here now; everything else is in the photo */
+  padding-top: calc(var(--header-h) + 60svh);
+  padding-bottom: clamp(2rem, 6vh, 4rem);
   max-width: 44rem;
 }
 @media (min-width: 701px) {
   .hero__content {
-    padding-top: calc(var(--header-h) + 46vh);
+    padding-top: calc(var(--header-h) + 62vh);
   }
 }
 .hero__title {
